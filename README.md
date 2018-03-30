@@ -72,4 +72,5 @@ public class ExampleProviderImplementation implements BoardProvider {
     }
 ```
 The previous code will produce this result: 
+
 ![](https://i.imgur.com/hI0I3Nx.png)
