@@ -1,0 +1,4 @@
+name: board
+main: me.missionary.board.example.ExampleUsage
+author: Missionary
+version: ${project.version}

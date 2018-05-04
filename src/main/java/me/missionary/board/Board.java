@@ -10,7 +10,6 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,11 +19,11 @@ import java.util.stream.Collectors;
  */
 public class Board {
 
-    private static final List<String> CACHED_ENTRIES = new ArrayList<>();
+    private static final String[] CACHED_ENTRIES = new String[ChatColor.values().length];
 
     static {
         for (int i = 0; i < 15; i++) {
-            CACHED_ENTRIES.add(i, ChatColor.values()[i].toString() + ChatColor.RESET);
+            CACHED_ENTRIES[i] = ChatColor.values()[i].toString() + ChatColor.RESET;
         }
     }
 
@@ -101,10 +100,10 @@ public class Board {
         for (int i = 0; i < entries.size(); i++) {
             String str = entries.get(i);
             BoardEntry entry = BoardEntry.translateToEntry(str);
-            Team team = getScoreboard().getTeam(CACHED_ENTRIES.get(i));
+            Team team = getScoreboard().getTeam(CACHED_ENTRIES[i]);
 
             if (team == null) {
-                team = this.getScoreboard().registerNewTeam(CACHED_ENTRIES.get(i));
+                team = this.getScoreboard().registerNewTeam(CACHED_ENTRIES[i]);
                 team.addEntry(team.getName());
             }
 
