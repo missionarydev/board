@@ -7,6 +7,7 @@ board can be easily added to your project with the use of Apache Maven.
 
 #### Requirements of board
 * [Java 8+](http://www.oracle.com/technetwork/java/javase/downloads/index.html) (usage of Java 8 specific features is heavy)
+* [Project Lombok](https://projectlombok.org/) Any version after 1.16.20 shall suffice
 * Bukkit/Spigot (up to the user where they find it)
 * [Git SCM](https://git-scm.com/downloads)
 * [Apache Maven 3](http://maven.apache.org/download.html)
