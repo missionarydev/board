@@ -1,4 +1,4 @@
-package me.missionary.board;
+package me.missionary.board.board;
 
 import lombok.Getter;
 import org.apache.commons.lang.StringUtils;

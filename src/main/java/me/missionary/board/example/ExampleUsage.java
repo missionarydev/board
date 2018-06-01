@@ -2,6 +2,8 @@ package me.missionary.board.example;
 
 import me.missionary.board.BoardManager;
 import me.missionary.board.provider.BoardProvider;
+import me.missionary.board.settings.BoardSettings;
+import me.missionary.board.settings.ScoreDirection;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -19,7 +21,7 @@ public class ExampleUsage extends JavaPlugin {
 
     @Override
     public void onEnable() {
-       manager = new BoardManager(this, new ExampleProviderImplementation());
+        manager = new BoardManager(this, BoardSettings.builder().boardProvider(new ExampleProviderImplementation()).scoreDirection(ScoreDirection.UP).build());
     }
 
     @Override

@@ -1,7 +1,8 @@
-package me.missionary.board;
+package me.missionary.board.board;
 
 import lombok.NonNull;
-import me.missionary.board.provider.BoardProvider;
+import me.missionary.board.settings.BoardSettings;
+import me.missionary.board.settings.ScoreDirection;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -10,8 +11,11 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * @author Missionary (missionarymc@gmail.com)
@@ -21,34 +25,28 @@ public class Board {
 
     private static final String[] CACHED_ENTRIES = new String[ChatColor.values().length];
 
+    private static final Function<String, String> APPLY_COLOR_TRANSLATION = s -> ChatColor.translateAlternateColorCodes('&', s);
+
     static {
-        for (int i = 0; i < 15; i++) {
-            CACHED_ENTRIES[i] = ChatColor.values()[i].toString() + ChatColor.RESET;
-        }
+        IntStream.range(0, 15).forEach(i -> CACHED_ENTRIES[i] = ChatColor.values()[i].toString() + ChatColor.RESET);
     }
 
     private final Player player;
     private final Objective objective;
     private final Team team;
-    private BoardProvider provider;
+    private BoardSettings boardSettings;
     private boolean ready;
 
-    public Board(@NonNull final Player player, final BoardProvider provider) {
+    public Board(@NonNull final Player player, final BoardSettings boardSettings) {
         this.player = player;
-        this.provider = provider;
-        Objective objective = (this.getScoreboard().getObjective("board") == null)
-                ? this.getScoreboard().registerNewObjective("board", "dummy")
-                : this.getScoreboard().getObjective("board");
-        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-        this.objective = objective;
-        Team team = (this.getScoreboard().getTeam("board") == null)
-                ? this.getScoreboard().registerNewTeam("board")
-                : this.getScoreboard().getTeam("board");
-        team.setAllowFriendlyFire(true);
-        team.setCanSeeFriendlyInvisibles(false);
-        team.setPrefix("");
-        team.setSuffix("");
-        this.team = team;
+        this.boardSettings = boardSettings;
+        this.objective = this.getScoreboard().getObjective("board") == null ? this.getScoreboard().registerNewObjective("board", "dummy") : this.getScoreboard().getObjective("board");
+        this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+        this.team = this.getScoreboard().getTeam("board") == null ? this.getScoreboard().registerNewTeam("board") : this.getScoreboard().getTeam("board");
+        this.team.setAllowFriendlyFire(true);
+        this.team.setCanSeeFriendlyInvisibles(false);
+        this.team.setPrefix("");
+        this.team.setSuffix("");
         this.ready = true;
     }
 
@@ -56,12 +54,8 @@ public class Board {
         return (player != null) ? player.getScoreboard() : null;
     }
 
-    public void setProvider(@NonNull BoardProvider provider) {
-        this.provider = provider;
-    }
-
     public void remove() {
-        this.reset();
+        this.resetScoreboard();
     }
 
     public void update() {
@@ -77,15 +71,19 @@ public class Board {
         }
 
         // Making sure the Scoreboard Provider is set.
-        if (provider == null) {
+        if (boardSettings == null) {
             return;
         }
 
         // Getting their Scoreboard display from the Scoreboard Provider.
-        final List<String> entries = provider.getLines(player).stream().map(string -> ChatColor.translateAlternateColorCodes('&', string)).collect(Collectors.toList());
+        final List<String> entries = boardSettings.getBoardProvider().getLines(player).stream().map(APPLY_COLOR_TRANSLATION).collect(Collectors.toList());
+
+        if (boardSettings.getScoreDirection() == ScoreDirection.UP) {
+            Collections.reverse(entries);
+        }
 
         // Setting the Scoreboard title
-        String title = provider.getTitle(player);
+        String title = boardSettings.getBoardProvider().getTitle(player);
         if (title.length() > 32) {
             Bukkit.getLogger().warning("The title " + title + " is over 32 characters in length, substringing to prevent errors.");
             title = title.substring(0, 32);
@@ -110,15 +108,22 @@ public class Board {
             team.setPrefix(entry.getPrefix());
             team.setSuffix(entry.getSuffix());
 
-            objective.getScore(team.getName()).setScore(15 - i);
+            switch (boardSettings.getScoreDirection()) {
+                case UP:
+                    objective.getScore(team.getName()).setScore(1 + i);
+                    break;
+                case DOWN:
+                    objective.getScore(team.getName()).setScore(15 - i);
+                    break;
+            }
         }
     }
 
-    public void removeEntry(@NonNull final String id) {
+    public void removeEntry(String id) {
         this.getScoreboard().resetScores(id);
     }
 
-    public void reset() {
+    public void resetScoreboard() {
         ready = false;
         player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
     }

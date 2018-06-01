@@ -1,6 +1,6 @@
 package me.missionary.board.provider;
 
-import me.missionary.board.Board;
+import me.missionary.board.board.Board;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Objective;
 
