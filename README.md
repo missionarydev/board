@@ -23,7 +23,7 @@ board will now have been added to your local maven repo (.m2) and you can begin 
 <dependency>
     <groupId>me.missionary</groupId>
     <artifactId>board</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.1.0-SNAPSHOT</version>
     <scope>compile</scope>
 </dependency>
 ```
@@ -32,12 +32,11 @@ with your plugin!
 ```java
 public class ExampleUsage extends JavaPlugin {
 
-
     private BoardManager manager;
 
     @Override
     public void onEnable() {
-       manager = new BoardManager(this, new ExampleProviderImplementation());
+        manager = new BoardManager(this, BoardSettings.builder().boardProvider(new ExampleProviderImplementation()).scoreDirection(ScoreDirection.UP).build());
     }
 
     @Override
@@ -45,6 +44,7 @@ public class ExampleUsage extends JavaPlugin {
         manager.onDisable();
     }
 }
+
 ```
 
 ## Functionality
