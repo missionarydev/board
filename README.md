@@ -1,4 +1,4 @@
-# board
+# board [![](https://jitpack.io/v/missionarydev/board.svg)](https://jitpack.io/#missionarydev/board)
 A clean and functional scoreboard api for use with Bukkit/Spigot plugins. The objective of board is to allow for easy creation 
 of scoreboard systems without the hassle of the included api's in Bukkit.
 
