@@ -40,6 +40,7 @@ public class BoardManager implements Listener {
 
     public void setBoardSettings(BoardSettings boardSettings) {
         this.boardSettings = boardSettings;
+        scoreboards.values().forEach(board -> board.setBoardSettings(boardSettings));
     }
 
     public boolean hasBoard(Player player) {

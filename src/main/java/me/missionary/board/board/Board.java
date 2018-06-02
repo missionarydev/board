@@ -1,6 +1,7 @@
 package me.missionary.board.board;
 
 import lombok.NonNull;
+import lombok.Setter;
 import me.missionary.board.settings.BoardSettings;
 import me.missionary.board.settings.ScoreDirection;
 import org.bukkit.Bukkit;
@@ -34,7 +35,7 @@ public class Board {
     private final Player player;
     private final Objective objective;
     private final Team team;
-    private BoardSettings boardSettings;
+    @Setter private BoardSettings boardSettings;
     private boolean ready;
 
     public Board(@NonNull final Player player, final BoardSettings boardSettings) {
