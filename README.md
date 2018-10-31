@@ -12,6 +12,7 @@ board can be easily added to your project with the use of Apache Maven.
 * [Git SCM](https://git-scm.com/downloads)
 * [Apache Maven 3](http://maven.apache.org/download.html)
 
+**It is recommended that you use the jitpack [![](https://jitpack.io/v/missionarydev/board.svg)](https://jitpack.io/#missionarydev/board)**
 After you have all of the requirements installed & configured you can use the following series of commands to download and install
 board to your local maven repo (.m2)
 ```
